@@ -6,6 +6,6 @@ void IRSensor::setup(int pin){
     IRSensor::pin = pin;
 }
 
-bool IRSensor::getDistance() {
+bool IRSensor::getValue() {
     return digitalRead(pin);
 }

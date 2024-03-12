@@ -18,6 +18,6 @@ void loop() {
   // put your main code here, to run repeatedly:
   //Serial.println(irArray.distances[0]);
   delay(100);
-  irArray.getDistances();
-  Serial.println(irArray.distances[0]);
+  irArray.refreshValues();
+  Serial.println(irArray.values[0]);
 }

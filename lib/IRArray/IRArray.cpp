@@ -15,8 +15,8 @@ void IRArray::setup() {
     }
 }
 
-void IRArray::getDistances() {
+void IRArray::refreshValues() {
     for(int i = 0; i < 5; i++) {
-        distances[i] = sensors[i].getDistance();
+        values[i] = sensors[i].getValue();
     }
 }

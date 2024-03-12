@@ -10,8 +10,8 @@ class IRArray {
     public:
         IRArray(int pins[5]);
         void setup();
-        void getDistances();
-        int distances[5];
+        void refreshValues();
+        int values[5];
 };
 
 #endif
