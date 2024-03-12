@@ -5,13 +5,13 @@
 
 class IRArray {
     private:
-        IRSensor* _sensors;
-        int *_pins; // Fix: Specify the size of the array
-        int _sizeOfArray;
+        int pins[5]; // Fix: Specify the size of the array
+        IRSensor sensors[5];
     public:
-        IRArray(int *pins, int sizeOfArray);
+        IRArray(int pins[5]);
         void setup();
-        bool* getDistances();
+        void getDistances();
+        int distances[5];
 };
 
 #endif

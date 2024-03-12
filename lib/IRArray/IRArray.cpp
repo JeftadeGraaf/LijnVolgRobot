@@ -2,25 +2,21 @@
 #include <IRArray.h>
 #include <IRSensor.h>
 
-IRArray::IRArray(int *pins, int sizeOfArray) {
-    _sizeOfArray = sizeOfArray;
-    _pins = pins;
-    for(int i = 0; i < _sizeOfArray; i++) {
-        _sensors[i] = IRSensor(pins[i]);
+IRArray::IRArray(int pins[5]) {
+    for(int i = 0; i < 5; i++) {
+        IRArray::pins[i] = pins[i];
+        sensors[i].setup(pins[i]); // Fix: Create IRSensor object directly
     }
 }
 
 void IRArray::setup() {
     for(int i = 0; i < 5; i++) {
-        Serial.println(_pins[i]);
-        pinMode(_pins[i], INPUT);
+        pinMode(pins[i], INPUT);
     }
 }
 
-bool* IRArray::getDistances() {
-    bool* distances = new bool[5];
+void IRArray::getDistances() {
     for(int i = 0; i < 5; i++) {
-        distances[i] = _sensors[i].getDistance();
+        distances[i] = sensors[i].getDistance();
     }
-    return distances;
 }

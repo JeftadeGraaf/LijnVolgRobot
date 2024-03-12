@@ -5,7 +5,7 @@ class IRSensor {
     private:
         int pin;
     public:
-        IRSensor(int pin);
+        void setup(int pin);
         bool getDistance();
 
 };

@@ -1,9 +1,9 @@
 #include <Arduino.h>
 #include <IRSensor.h>
 
-IRSensor::IRSensor(int pin) {
-    this->pin = pin;
+void IRSensor::setup(int pin){
     pinMode(pin, INPUT);
+    IRSensor::pin = pin;
 }
 
 bool IRSensor::getDistance() {
