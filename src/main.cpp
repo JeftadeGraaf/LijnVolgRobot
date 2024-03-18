@@ -1,7 +1,12 @@
 #include <Arduino.h>
+#include <Display.h>
 #include <IRSensor.h>
 #include <IRArray.h>
 #include <USSensor.h>
+
+// put function declarations here:
+int digitPins[7] = {17, 16, 15, 14, 2, 1, 0};
+Display display(digitPins, 18, 19);
 
 int IRArrayPins[5] = {4,5,6,7,8};
 
@@ -20,6 +25,7 @@ USSensor usSensor(triggerPin, echoPin);
 
 void setup(){
   //define pins
+  display.setup();
   pinMode(directionPinA, OUTPUT); // right motor
   pinMode(pwmPinA, OUTPUT);
   pinMode(directionPinB, OUTPUT); // left motor
@@ -59,4 +65,5 @@ void loop(){
   //   analogWrite(pwmPinA, 0);
   //   analogWrite(pwmPinB, 0);
   // }
+  display.displayChar('F');
 }
