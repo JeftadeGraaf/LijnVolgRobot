@@ -1,18 +1,23 @@
 #include <Arduino.h>
+#include <Display.h>
 
 // put function declarations here:
-int myFunction(int, int);
+int digitPins[7] = {17, 16, 15, 14, 2, 1, 0};
+Display display(digitPins, 18, 19);
+
 
 void setup() {
   // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  display.setup();
+  Serial.begin(9600);
+
+
+
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-}
-
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  
+  
+  display.displayChar('F');
 }
