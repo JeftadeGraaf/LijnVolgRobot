@@ -3,10 +3,13 @@
 #include <IRSensor.h>
 #include <IRArray.h>
 #include <USSensor.h>
+#include <MotorController.h>
+
 
 // put function declarations here:
 int digitPins[7] = {17, 16, 15, 14, 2, 1, 0};
 Display display(digitPins, 18, 19);
+MotorController motorcontroller(12, 3, 13, 11);
 
 int IRArrayPins[5] = {8,7,6,5,4};
 
@@ -32,10 +35,7 @@ USSensor usSensor(triggerPin, echoPin);
 void setup(){
   //define pins
   display.setup();
-  pinMode(directionPinRechts, OUTPUT); // right motor
-  pinMode(pwmPinRechts, OUTPUT);
-  pinMode(directionPinLinks, OUTPUT); // left motor
-  pinMode(pwmPinLinks, OUTPUT);
+  motorcontroller.setup();
   irArray.setup();
   usSensor.setup();
 }
@@ -60,33 +60,34 @@ bool checkFinish() {
   delay(250);
   analogWrite(pwmPinRechts, 0);
   analogWrite(pwmPinLinks, 0);
+  delay(250);
   for (int i; i < 5; i++) {
     if (irArray.values[i] == 1) {
       // Moves the robot slightly backwards to it's starting position
-      digitalWrite(directionPinRechts, HIGH);
-      digitalWrite(directionPinLinks, LOW);
+      digitalWrite(directionPinRechts, rechts_achteruit);
+      digitalWrite(directionPinLinks, links_achteruit);
       analogWrite(pwmPinRechts, 100);
       analogWrite(pwmPinLinks, 100);
       delay(250);
       analogWrite(pwmPinRechts, 0);
       analogWrite(pwmPinLinks, 0);
       // Resets the robot motors
-      digitalWrite(directionPinLinks, LOW);
-      digitalWrite(directionPinLinks, HIGH);
+      digitalWrite(directionPinRechts, rechts_vooruit);
+      digitalWrite(directionPinLinks, links_vooruit);
       return false;
     }  
   }
   // Moves the robot slightly backwards to it's starting position
-  digitalWrite(directionPinRechts, LOW);
-  digitalWrite(directionPinLinks, HIGH);
-  analogWrite(pwmPinRechts, 50);
-  analogWrite(pwmPinLinks, 50);
-  delay(10000);
+  digitalWrite(directionPinRechts, rechts_achteruit);
+  digitalWrite(directionPinLinks, links_achteruit);
+  analogWrite(pwmPinRechts, 100);
+  analogWrite(pwmPinLinks, 100);
+  delay(250);
   analogWrite(pwmPinRechts, 0);
   analogWrite(pwmPinLinks, 0);
   // Resets the robot motors
-  digitalWrite(directionPinLinks, HIGH);
-  digitalWrite(directionPinLinks, LOW);
+  digitalWrite(directionPinRechts, rechts_vooruit);
+  digitalWrite(directionPinLinks, links_vooruit);;
   return true;
 }
 
@@ -95,8 +96,8 @@ bool checkIntersection() {
     bool i;
     
     // Moves the robot slightly forward
-    analogWrite(pwmPinRechts, 50);
-    analogWrite(pwmPinLinks, 50);
+    analogWrite(pwmPinRechts, 100);
+    analogWrite(pwmPinLinks, 100);
     delay(250);
     analogWrite(pwmPinRechts, 0);
     analogWrite(pwmPinLinks, 0);
@@ -107,16 +108,16 @@ bool checkIntersection() {
       i = false;
     }
     // Moves the robot slightly backwards to it's starting position
-    digitalWrite(directionPinRechts, LOW);
-    digitalWrite(directionPinLinks, HIGH);
-    analogWrite(pwmPinRechts, 50);
-    analogWrite(pwmPinLinks, 50);
+    digitalWrite(directionPinRechts, rechts_achteruit);
+    digitalWrite(directionPinLinks, links_achteruit);
+    analogWrite(pwmPinRechts, 100);
+    analogWrite(pwmPinLinks, 100);
     delay(250);
     analogWrite(pwmPinRechts, 0);
     analogWrite(pwmPinLinks, 0);
     // Resets the robot motors
-    digitalWrite(directionPinLinks, HIGH);
-    digitalWrite(directionPinLinks, LOW);
+    digitalWrite(directionPinRechts, rechts_vooruit);
+    digitalWrite(directionPinLinks, links_vooruit);
 
     return i;
 }
@@ -128,39 +129,36 @@ void checkForObstacle() {
 }
 
 void turnLeft() {
-  digitalWrite(directionPinLinks, LOW);
+  digitalWrite(directionPinLinks, links_achteruit);
   analogWrite(pwmPinLinks, 100);
   analogWrite(pwmPinRechts, 100);
   delay(300);
   analogWrite(pwmPinRechts, 0);
   analogWrite(pwmPinLinks, 0);
-  digitalWrite(directionPinLinks, HIGH);
+  digitalWrite(directionPinLinks, links_vooruit);
   delay(1000);
 }
 
 void turnRight() {
-  digitalWrite(directionPinRechts, LOW);
+  digitalWrite(directionPinRechts, rechts_achteruit);
   analogWrite(pwmPinLinks, 100);
   analogWrite(pwmPinRechts, 100);
   delay(300);
   analogWrite(pwmPinRechts, 0);
   analogWrite(pwmPinLinks, 0);
-  digitalWrite(directionPinLinks, HIGH);
+  digitalWrite(directionPinLinks, rechts_vooruit);
   delay(1000);
 }
 
-void getMovement(int arrayValues[5]) {
-  char bitvalue[5];
-  for (int i = 0; i < 5; ++i) {
-    bitvalue[i] = arrayValues[i];
+void getMovement() {
+ 
+  String bitvalue = "";
+
+  for (int i = 0; i < 5; i++) {
+      bitvalue += String(irArray.values[i]);
   }
 
-  //motor values
-  int arraytinyright[4] = {70, 1, 55, 1};
-  int arraybigright[4] = {80, 1, 30, 1};
-  int arrayahead[4] = {100, 1, 100, 1};
-  int arraytinyleft[4] = {70, 1, 55, 1};
-  int arraybigleft[4] = {80, 1, 30, 1};
+
 
   if (bitvalue == "00000") {
     if (checkFinish()) {
@@ -171,128 +169,134 @@ void getMovement(int arrayValues[5]) {
     }
   }
   else if (bitvalue == "00001"){
-    //case 1
+    motorcontroller.bigRight();
   }
 
   else if (bitvalue == "00010"){
-    //case 2
+    motorcontroller.smallRight();
   }
 
   else if (bitvalue == "00011"){
-    //case 3
+    motorcontroller.bigLeft();
   }
 
   else if (bitvalue == "00100"){
-    //case 4
+    motorcontroller.moveForward();
+
   }
 
   else if (bitvalue == "00101"){
-    //case 5
+    motorcontroller.moveForward();
   }
 
   else if (bitvalue == "00110"){
-    //case 6
+    motorcontroller.moveForward();
   }
 
   else if (bitvalue == "00111"){
-    //case 7
+    motorcontroller.smallLeft();
   }
 
   else if (bitvalue == "01000"){
-    //case 8
+    motorcontroller.smallLeft();
   }
 
   else if (bitvalue == "01001"){
-    //case 9
+    motorcontroller.moveForward();
   }
 
   else if (bitvalue == "01010"){
-    //case 10
+    motorcontroller.moveForward();
   }
 
   else if (bitvalue == "01011"){
-    //case 11
+    motorcontroller.moveForward();
   }
 
   else if (bitvalue == "01100"){
-    //case 12
+    motorcontroller.moveForward();
   }
 
   else if (bitvalue == "01101"){
-    //case 13
+    motorcontroller.moveForward();
   }
 
   else if (bitvalue == "01110"){
-    //case 14
+    motorcontroller.moveForward();
   }
 
   else if (bitvalue == "01111"){
-    digitalWrite(directionPinRechts, rechts_vooruit);
-    analogWrite(directionPinLinks, arraytinyright[0]);
+    motorcontroller.bigLeft();
   }
 
   else if (bitvalue == "10000"){
-    //case 16
+    motorcontroller.bigLeft();
   }
 
   else if (bitvalue == "10001"){
-    //case 17
+    motorcontroller.moveForward();
   }
 
   else if (bitvalue == "10010"){
-    //case 18
+    motorcontroller.moveForward();
   }
 
   else if (bitvalue == "10011"){
-    //case 19
+    motorcontroller.smallLeft();
   }
 
   else if (bitvalue == "10100"){
-    //case 20
+    motorcontroller.moveForward();
   }
 
   else if (bitvalue == "10101"){
-    //case 21
+    motorcontroller.moveForward();
   }
 
   else if (bitvalue == "10110"){
-    //case 22
+    motorcontroller.moveForward();
   }
 
   else if (bitvalue == "10111"){
-    //case 23
+    motorcontroller.smallLeft();
   }
 
   else if (bitvalue == "11000"){
-    //case 24
+    motorcontroller.bigRight();
   }
 
   else if (bitvalue == "11001"){
-    //case 25
+    motorcontroller.smallRight();
   }
 
   else if (bitvalue == "11010"){
-    //case 26
+    motorcontroller.moveForward();
   }
 
   else if (bitvalue == "11011"){
-    //case 27
+    motorcontroller.moveForward();
+    motorcontroller.counter = 0;
   }
 
   else if (bitvalue == "11100"){
-    //case 28
+    motorcontroller.smallRight();
   }
 
   else if (bitvalue == "11101"){
-    //case 29
+    motorcontroller.smallRight();
   }
 
   else if (bitvalue == "11110"){
-    //case 30
+    motorcontroller.bigRight();
   }
 
   else if (bitvalue == "11111"){
-    //case 31
+    if(motorcontroller.counter > 100){
+    motorcontroller.turnAround();
+    motorcontroller.counter = 0;
+    } else {
+      motorcontroller.counter++;
+    }
   }
 
 }
@@ -300,9 +304,7 @@ void getMovement(int arrayValues[5]) {
 
 
 void loop(){
-  digitalWrite(directionPinRechts, rechts_achteruit);
-  analogWrite(pwmPinRechts, 255);
-  delay(1000);
-  analogWrite(pwmPinRechts, 0);
+  irArray.refreshValues();
+  getMovement();
 
 }
