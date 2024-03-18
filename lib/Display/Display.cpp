@@ -20,11 +20,40 @@ void Display::setup() {
     digitalWrite(u2, LOW);
 }
 
-void Display::displayChar(char character) {
+void Display::setCharacters(char charu1, char charu2) {
+    Display::charu1 = charu1;
+    Display::charu2 = charu2;
+}
+
+void Display::displayChar(char character, bool display) {
+    if (display) {
+        digitalWrite(u1, HIGH);
+        digitalWrite(u2, LOW);
+    } else {
+        digitalWrite(u1, LOW);
+        digitalWrite(u2, HIGH);
+    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
     int index = segmentDisplayChar.indexOf(character);
     for(int i = 0; i < 7; i++){
         int value = bitRead(segmentDisplay[index], i);
         digitalWrite(pin[i], value);
+    }
+}
+
+void Display::displayCharacters() {
+    //clear display
+    digitalWrite(u1, LOW);
+    for(int i = 0; i < 7; i++){
+        digitalWrite(pin[i], LOW);
+    }
+    displayChar(charu1, true);
+    delay(5);
+    //clear display
+    digitalWrite(u2, LOW);
+    for(int i = 0; i < 7; i++){
+        digitalWrite(pin[i], LOW);
+    }
     
-  }
+    displayChar(charu2, false);
+    delay(5);
 }
