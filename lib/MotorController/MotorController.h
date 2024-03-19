@@ -13,6 +13,7 @@ private:
     int arrayahead[4] = {static_cast<int>(57 * batterymultiplier), 1, static_cast<int>(60 * batterymultiplier), 1};
     int arraytinyleft[4] = {static_cast<int>(40 * batterymultiplier), 1, static_cast<int>(55 * batterymultiplier), 1};
     int arraybigleft[4] = {static_cast<int>(0 * batterymultiplier), 1, static_cast<int>(50 * batterymultiplier), 1};
+    int arrayreverse[4] = {static_cast<int>(57 * batterymultiplier), 1, static_cast<int>(60 * batterymultiplier), 1};
 
     int directionPinRechts = 12; // right, low = vooruit
     int pwmPinRechts = 3;
