@@ -18,8 +18,7 @@ void MotorController::setup() {
 }
 
 void MotorController::turnAround() {
-    // Add your implementation here
-    if (onWhite == true){
+
         digitalWrite(directionPinLinks, links_achteruit);
         analogWrite(pwmPinLinks, 100);
         analogWrite(pwmPinRechts, 100);
@@ -30,17 +29,8 @@ void MotorController::turnAround() {
         delay(1000);
         onWhite = false;
         functionCalledFirstTime = false;
-    }
-    else {
-        if (functionCalledFirstTime == false){
-            t1 = millis();
-            functionCalledFirstTime = true;
-        }
-        if (millis() - t1 < 500){
-            onWhite = true;
-        }
-    }
-    
+
+
 }
 
 bool MotorController::checkFinish() {

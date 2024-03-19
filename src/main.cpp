@@ -6,6 +6,23 @@
 #include <MotorController.h>
 
 
+char getLastTwoDigitsChar(int number, int position) {
+  // Convert the number to a string
+  String numberString = String(number);
+  
+  // Get the length of the string
+  int length = numberString.length();
+
+  // Calculate the position from the end of the string
+  int charPosition = length - position;
+
+  // Check if the position is valid
+  if (charPosition >= 0 && charPosition < length) {
+    return numberString.charAt(charPosition);
+  } else {
+    return '0'; // Return '0' if position is out of range
+  }
+}
 // put function declarations here:
 int digitPins[7] = {17, 16, 15, 14, 2, 1, 0};
 Display display(digitPins, 18, 19);
@@ -291,9 +308,18 @@ void getMovement() {
   }
 
   else if (bitvalue == "11111"){
-    if(motorcontroller.counter > 100){
-    motorcontroller.turnAround();
+    char digit_1 = getLastTwoDigitsChar(motorcontroller.counter, 1);
+    char digit_2 = getLastTwoDigitsChar(motorcontroller.counter, 2);
+    display.setCharacters(digit_2, digit_1);
+    display.displayCharacters();
+
+    if(motorcontroller.counter > 30){
+
+
     motorcontroller.counter = 0;
+    motorcontroller.turnAround();
+    
+    
     } else {
       motorcontroller.counter++;
     }
