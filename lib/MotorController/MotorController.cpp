@@ -79,14 +79,14 @@ void MotorController::moveBackward() {
 
 void MotorController::bigLeft() {
     digitalWrite(directionPinRechts, rechts_vooruit);
-    digitalWrite(directionPinLinks, links_vooruit);
+    digitalWrite(directionPinLinks, links_achteruit);
     analogWrite(pwmPinRechts, arraybigleft[2]);
     analogWrite(pwmPinLinks, arraybigleft[0]);
     delay(100);
 }
 
 void MotorController::bigRight() {
-    digitalWrite(directionPinRechts, rechts_vooruit);
+    digitalWrite(directionPinRechts, rechts_achteruit);
     digitalWrite(directionPinLinks, links_vooruit);
     analogWrite(pwmPinRechts, arraybigright[2]);
     analogWrite(pwmPinLinks, arraybigright[0]);

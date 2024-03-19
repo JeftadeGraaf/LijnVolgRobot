@@ -56,7 +56,8 @@ void setup(){
   display.setup();
   motorcontroller.setup();
   irArray.setup();
-  usSensor.setup();
+  usSensor.setup();\
+  Serial.begin(9600);
 }
 
 // Turns the robot 180 degrees
@@ -73,12 +74,12 @@ void turnAround() {
 
 // Checks if all sensors are displaying black
 String checkFinish() {
-  motorcontroller.stop();
   // Moves the robot slightly forward
   motorcontroller.moveForward();
   delay(500);
   motorcontroller.stop();
-  delay(200);
+  delay(250);
+  irArray.refreshValues();
   if ((irArray.values[0] == 1 || irArray.values[4] == 1) && (irArray.values[1] == 0 || irArray.values[2] == 0 || irArray.values[3] == 0) ) {
     return "straight";
   }
@@ -88,7 +89,7 @@ String checkFinish() {
   }
   // Moves the robot slightly backwards to it's starting position
   motorcontroller.moveBackward();
-  delay(700);
+  delay(500);
   motorcontroller.stop();
   return "turn";
 }
@@ -166,9 +167,10 @@ void getMovement() {
 
 
   if (bitvalue == "00000") {
-    if (checkFinish() == "turn") {
+    if (checkFinish() != "finish") {
       turnRight();
     }
+
   }
   else if (bitvalue == "00001"){
     motorcontroller.bigLeft();
@@ -184,21 +186,19 @@ void getMovement() {
     String state = checkFinish();
     if (state == "straight") {
       motorcontroller.moveForward();
-    } else {
+    } else if (state == "turn"){
+        while (irArray.values[0] == 1){
+        irArray.refreshValues();
+        motorcontroller.moveForward();
+        }
 
-      turnRight();
-      while (irArray.values[0] == 1){
-      irArray.refreshValues();
-      motorcontroller.moveForward();
-      }
+        motorcontroller.stop();
+        delay (100);
 
-  	  motorcontroller.stop();
-      delay (100);
-
-      while (irArray.values[0] == 0){
-      irArray.refreshValues();
-      motorcontroller.bigLeft();
-      }
+        while (irArray.values[0] == 0){
+        irArray.refreshValues();
+        motorcontroller.bigLeft();
+        }
     }
   }
 
@@ -250,7 +250,7 @@ void getMovement() {
 
   else if (bitvalue == "01111"){
     motorcontroller.bigLeft();
-    delay(250);
+    // delay(250);
   }
 
   else if (bitvalue == "10000"){
@@ -286,10 +286,10 @@ void getMovement() {
   }
 
   else if (bitvalue == "11000"){
-    while (irArray.values[4] == 0){
-      irArray.refreshValues();
-      motorcontroller.bigRight();
-    }
+    //while (irArray.values[4] == 0 && (irArray.values[0] == 1 || irArray.values[1] == 1 || irArray.values[2] == 1 || irArray.values[3] == 1)){
+    // irArray.refreshValues();
+    motorcontroller.bigRight();
+    //}
     // motorcontroller.bigRight();
     // motorcontroller.counter = 0;
     // delay(700);
@@ -346,6 +346,8 @@ void getMovement() {
 
 
 void loop(){
+  // while(driving){  
     irArray.refreshValues();
     getMovement();
+  //}
 }
