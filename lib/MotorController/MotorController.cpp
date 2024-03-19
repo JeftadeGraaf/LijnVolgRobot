@@ -70,6 +70,13 @@ void MotorController::moveForward() {
     analogWrite(pwmPinLinks, 100);
 }
 
+void MotorController::moveBackward() {
+    digitalWrite(directionPinRechts, rechts_achteruit);
+    digitalWrite(directionPinLinks, links_achteruit);
+    analogWrite(pwmPinRechts, 100);
+    analogWrite(pwmPinLinks, 100);
+}
+
 void MotorController::bigLeft() {
     digitalWrite(directionPinRechts, rechts_vooruit);
     digitalWrite(directionPinLinks, links_vooruit);

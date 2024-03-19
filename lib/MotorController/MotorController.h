@@ -33,6 +33,7 @@ public:
     void turnAround();
     bool checkFinish();
     void moveForward();
+    void moveBackward();
     void bigLeft();
     void bigRight();
     void smallLeft();
