@@ -6,12 +6,13 @@
 // Define your class and its member functions
 class MotorController {
 private:
+    float batterymultiplier = 1.0f; // Use float instead of int for decimal precision
     // Add your member variables here
-    int arraytinyright[4] = {70, 1, 55, 1};
-    int arraybigright[4] = {100, 1, 0, 1};
-    int arrayahead[4] = {70, 1, 70, 1};
-    int arraytinyleft[4] = {55, 1, 70, 1};
-    int arraybigleft[4] = {0, 1, 100, 1};
+    int arraytinyright[4] = {static_cast<int>(55 * batterymultiplier), 1, static_cast<int>(40 * batterymultiplier), 1};
+    int arraybigright[4] = {static_cast<int>(50 * batterymultiplier), 1, static_cast<int>(0 * batterymultiplier), 1};
+    int arrayahead[4] = {static_cast<int>(57 * batterymultiplier), 1, static_cast<int>(60 * batterymultiplier), 1};
+    int arraytinyleft[4] = {static_cast<int>(40 * batterymultiplier), 1, static_cast<int>(55 * batterymultiplier), 1};
+    int arraybigleft[4] = {static_cast<int>(0 * batterymultiplier), 1, static_cast<int>(50 * batterymultiplier), 1};
 
     int directionPinRechts = 12; // right, low = vooruit
     int pwmPinRechts = 3;
@@ -43,4 +44,4 @@ public:
     void degrees90Right();
 };
 
-#endif // MOTORCONTROLLER_H
+#endif;

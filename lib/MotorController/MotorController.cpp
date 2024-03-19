@@ -66,8 +66,8 @@ bool MotorController::checkFinish() {
 void MotorController::moveForward() {
     digitalWrite(directionPinRechts, rechts_vooruit);
     digitalWrite(directionPinLinks, links_vooruit);
-    analogWrite(pwmPinRechts, 100);
-    analogWrite(pwmPinLinks, 100);
+    analogWrite(pwmPinRechts, arrayahead[2]);
+    analogWrite(pwmPinLinks, arrayahead[0]);
 }
 
 void MotorController::moveBackward() {

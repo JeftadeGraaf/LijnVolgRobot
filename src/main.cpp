@@ -44,12 +44,14 @@ int links_achteruit = 0;
 
 //boolean to switch direction
 bool directionState;
+bool driving = true;
 
 
 IRArray irArray(IRArrayPins);
 USSensor usSensor(triggerPin, echoPin);
 
 void setup(){
+  TCCR2B = TCCR2B & B11111000 | B00000111;
   //define pins
   display.setup();
   motorcontroller.setup();
@@ -70,42 +72,42 @@ void turnAround() {
 }
 
 // Checks if all sensors are displaying black
-bool checkFinish() {
+String checkFinish() {
+  digitalWrite(directionPinRechts, rechts_vooruit);
+  digitalWrite(directionPinLinks, links_vooruit);
   // Moves the robot slightly forward
-  analogWrite(pwmPinRechts, 100);
-  analogWrite(pwmPinLinks, 100);
-  delay(250);
+  analogWrite(pwmPinRechts, 75);
+  analogWrite(pwmPinLinks, 75);
+  delay(500);
   analogWrite(pwmPinRechts, 0);
   analogWrite(pwmPinLinks, 0);
-  delay(250);
-  for (int i; i < 5; i++) {
-    if (irArray.values[i] == 1) {
-      // Moves the robot slightly backwards to it's starting position
-      digitalWrite(directionPinRechts, rechts_achteruit);
-      digitalWrite(directionPinLinks, links_achteruit);
-      analogWrite(pwmPinRechts, 100);
-      analogWrite(pwmPinLinks, 100);
-      delay(250);
-      analogWrite(pwmPinRechts, 0);
-      analogWrite(pwmPinLinks, 0);
-      // Resets the robot motors
-      digitalWrite(directionPinRechts, rechts_vooruit);
-      digitalWrite(directionPinLinks, links_vooruit);
-      return false;
-    }  
+  delay(500);
+  if (irArray.values[2] == 0) {
+    // Moves the robot slightly backwards to it's starting position
+    digitalWrite(directionPinRechts, rechts_achteruit);
+    digitalWrite(directionPinLinks, links_achteruit);
+    analogWrite(pwmPinRechts, 75);
+    analogWrite(pwmPinLinks, 75);
+    delay(170);
+    analogWrite(pwmPinRechts, 0);
+    analogWrite(pwmPinLinks, 0);
+    // Resets the robot motors
+    digitalWrite(directionPinRechts, rechts_vooruit);
+    digitalWrite(directionPinLinks, links_vooruit);
+    return "straight";
   }
   // Moves the robot slightly backwards to it's starting position
   digitalWrite(directionPinRechts, rechts_achteruit);
   digitalWrite(directionPinLinks, links_achteruit);
-  analogWrite(pwmPinRechts, 100);
-  analogWrite(pwmPinLinks, 100);
-  delay(250);
+  analogWrite(pwmPinRechts, 75);
+  analogWrite(pwmPinLinks, 75);
+  delay(500);
   analogWrite(pwmPinRechts, 0);
   analogWrite(pwmPinLinks, 0);
   // Resets the robot motors
   digitalWrite(directionPinRechts, rechts_vooruit);
-  digitalWrite(directionPinLinks, links_vooruit);;
-  return true;
+  digitalWrite(directionPinLinks, links_vooruit);
+  return "finish";
 }
 
 // Checks if there is a straight path available or if the robot is on the finish line
@@ -157,6 +159,9 @@ void turnLeft() {
 }
 
 void turnRight() {
+  // analogWrite(pwmPinLinks, 75);
+  // analogWrite(pwmPinRechts, 75);
+  // delay(150);
   digitalWrite(directionPinRechts, rechts_achteruit);
   analogWrite(pwmPinLinks, 100);
   analogWrite(pwmPinRechts, 100);
@@ -179,10 +184,9 @@ void getMovement() {
 
   if (bitvalue == "00000") {
     if (checkFinish()) {
-      // Stop het hele programma en laat finishtijd zien
-    }
-    else {
-      turnLeft();
+      driving = false;
+    } else {
+      turnRight();
     }
   }
   else if (bitvalue == "00001"){
@@ -194,8 +198,14 @@ void getMovement() {
   }
 
   else if (bitvalue == "00011"){
-    motorcontroller.bigLeft();
-    motorcontroller.counter = 0;
+    String state = checkFinish();
+    if (state == "finish") {
+      driving = false;
+    } else if (state == "straight") {
+      motorcontroller.moveForward();
+    } else {
+      turnLeft();
+    }
   }
 
   else if (bitvalue == "00100"){
@@ -282,8 +292,14 @@ void getMovement() {
   }
 
   else if (bitvalue == "11000"){
-    motorcontroller.bigRight();
-    motorcontroller.counter = 0;
+    while (irArray.values[4] == 0){
+      irArray.refreshValues();
+      motorcontroller.bigRight();
+    }
+    // motorcontroller.bigRight();
+    // motorcontroller.counter = 0;
+    // delay(700);
+    // motorcontroller.stop();
   }
 
   else if (bitvalue == "11001"){
@@ -336,7 +352,6 @@ void getMovement() {
 
 
 void loop(){
-  irArray.refreshValues();
-  getMovement();
-
+    irArray.refreshValues();
+    getMovement();
 }
