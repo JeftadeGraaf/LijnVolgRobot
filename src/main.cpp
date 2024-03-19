@@ -73,73 +73,56 @@ void turnAround() {
 
 // Checks if all sensors are displaying black
 String checkFinish() {
-  digitalWrite(directionPinRechts, rechts_vooruit);
-  digitalWrite(directionPinLinks, links_vooruit);
+  motorcontroller.stop();
   // Moves the robot slightly forward
-  analogWrite(pwmPinRechts, 75);
-  analogWrite(pwmPinLinks, 75);
+  motorcontroller.moveForward();
   delay(500);
-  analogWrite(pwmPinRechts, 0);
-  analogWrite(pwmPinLinks, 0);
-  delay(500);
-  if (irArray.values[2] == 0) {
-    // Moves the robot slightly backwards to it's starting position
-    digitalWrite(directionPinRechts, rechts_achteruit);
-    digitalWrite(directionPinLinks, links_achteruit);
-    analogWrite(pwmPinRechts, 75);
-    analogWrite(pwmPinLinks, 75);
-    delay(170);
-    analogWrite(pwmPinRechts, 0);
-    analogWrite(pwmPinLinks, 0);
-    // Resets the robot motors
-    digitalWrite(directionPinRechts, rechts_vooruit);
-    digitalWrite(directionPinLinks, links_vooruit);
+  motorcontroller.stop();
+  delay(200);
+  if ((irArray.values[0] == 1 || irArray.values[4] == 1) && (irArray.values[1] == 0 || irArray.values[2] == 0 || irArray.values[3] == 0) ) {
     return "straight";
   }
+  else if (irArray.values[0] == 0 && irArray.values[1] == 0 && irArray.values[2] == 0 && irArray.values[3] == 0 && irArray.values[4] == 0) {
+    driving = false;
+    return "finish";
+  }
   // Moves the robot slightly backwards to it's starting position
-  digitalWrite(directionPinRechts, rechts_achteruit);
-  digitalWrite(directionPinLinks, links_achteruit);
-  analogWrite(pwmPinRechts, 75);
-  analogWrite(pwmPinLinks, 75);
-  delay(500);
-  analogWrite(pwmPinRechts, 0);
-  analogWrite(pwmPinLinks, 0);
-  // Resets the robot motors
-  digitalWrite(directionPinRechts, rechts_vooruit);
-  digitalWrite(directionPinLinks, links_vooruit);
-  return "finish";
+  motorcontroller.moveBackward();
+  delay(700);
+  motorcontroller.stop();
+  return "turn";
 }
 
 // Checks if there is a straight path available or if the robot is on the finish line
-bool checkIntersection() {
-    bool i;
+// bool checkIntersection() {
+//     bool i;
     
-    // Moves the robot slightly forward
-    analogWrite(pwmPinRechts, 100);
-    analogWrite(pwmPinLinks, 100);
-    delay(250);
-    analogWrite(pwmPinRechts, 0);
-    analogWrite(pwmPinLinks, 0);
-    // Checks if there is a straight path or if the robot is on the finish line
-    if (irArray.values[2] == 0) {
-      i = true;
-    } else {
-      i = false;
-    }
-    // Moves the robot slightly backwards to it's starting position
-    digitalWrite(directionPinRechts, rechts_achteruit);
-    digitalWrite(directionPinLinks, links_achteruit);
-    analogWrite(pwmPinRechts, 100);
-    analogWrite(pwmPinLinks, 100);
-    delay(250);
-    analogWrite(pwmPinRechts, 0);
-    analogWrite(pwmPinLinks, 0);
-    // Resets the robot motors
-    digitalWrite(directionPinRechts, rechts_vooruit);
-    digitalWrite(directionPinLinks, links_vooruit);
+//     // Moves the robot slightly forward
+//     analogWrite(pwmPinRechts, 100);
+//     analogWrite(pwmPinLinks, 100);
+//     delay(250);
+//     analogWrite(pwmPinRechts, 0);
+//     analogWrite(pwmPinLinks, 0);
+//     // Checks if there is a straight path or if the robot is on the finish line
+//     if (irArray.values[2] == 0) {
+//       i = true;
+//     } else {
+//       i = false;
+//     }
+//     // Moves the robot slightly backwards to it's starting position
+//     digitalWrite(directionPinRechts, rechts_achteruit);
+//     digitalWrite(directionPinLinks, links_achteruit);
+//     analogWrite(pwmPinRechts, 100);
+//     analogWrite(pwmPinLinks, 100);
+//     delay(250);
+//     analogWrite(pwmPinRechts, 0);
+//     analogWrite(pwmPinLinks, 0);
+//     // Resets the robot motors
+//     digitalWrite(directionPinRechts, rechts_vooruit);
+//     digitalWrite(directionPinLinks, links_vooruit);
 
-    return i;
-}
+//     return i;
+// }
 
 void checkForObstacle() {
   if (usSensor.getDistance() < 10) {
@@ -183,9 +166,7 @@ void getMovement() {
 
 
   if (bitvalue == "00000") {
-    if (checkFinish()) {
-      driving = false;
-    } else {
+    if (checkFinish() == "turn") {
       turnRight();
     }
   }
@@ -198,13 +179,26 @@ void getMovement() {
   }
 
   else if (bitvalue == "00011"){
+    motorcontroller.stop();
+    delay(1000);
     String state = checkFinish();
-    if (state == "finish") {
-      driving = false;
-    } else if (state == "straight") {
+    if (state == "straight") {
       motorcontroller.moveForward();
     } else {
-      turnLeft();
+
+      turnRight();
+      while (irArray.values[0] == 1){
+      irArray.refreshValues();
+      motorcontroller.moveForward();
+      }
+
+  	  motorcontroller.stop();
+      delay (100);
+
+      while (irArray.values[0] == 0){
+      irArray.refreshValues();
+      motorcontroller.bigLeft();
+      }
     }
   }
 
