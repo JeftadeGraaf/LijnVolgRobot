@@ -7,10 +7,10 @@
 class MotorController {
 private:
     // Add your member variables here
-    int arraytinyright[4] = {70, 1, 0, 1};
+    int arraytinyright[4] = {70, 1, 55, 1};
     int arraybigright[4] = {100, 1, 0, 1};
-    int arrayahead[4] = {60, 1, 60, 1};
-    int arraytinyleft[4] = {0, 1, 70, 1};
+    int arrayahead[4] = {70, 1, 70, 1};
+    int arraytinyleft[4] = {55, 1, 70, 1};
     int arraybigleft[4] = {0, 1, 100, 1};
 
     int directionPinRechts = 12; // right, low = vooruit
@@ -24,8 +24,6 @@ private:
     const int links_achteruit = 0;
 
     long int t1;
-    bool onWhite = false;
-    bool functionCalledFirstTime = false;
 public:
     // Constructor(s)
     MotorController(int directionPinRechts, int pwmPinRechts, int directionPinLinks, int pwmPinLinks);
@@ -40,6 +38,8 @@ public:
     void smallLeft();
     void smallRight();
     void stop();
+    void degrees90Left();
+    void degrees90Right();
 };
 
 #endif // MOTORCONTROLLER_H

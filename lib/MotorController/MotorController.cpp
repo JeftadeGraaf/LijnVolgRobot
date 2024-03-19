@@ -27,9 +27,34 @@ void MotorController::turnAround() {
         analogWrite(pwmPinLinks, 0);
         digitalWrite(directionPinLinks, links_vooruit);
         delay(1000);
-        onWhite = false;
-        functionCalledFirstTime = false;
 
+
+}
+
+void MotorController::degrees90Left() {
+
+        digitalWrite(directionPinLinks, links_achteruit);
+        analogWrite(pwmPinLinks, 100);
+        analogWrite(pwmPinRechts, 100);
+        delay(300);
+        analogWrite(pwmPinRechts, 0);
+        analogWrite(pwmPinLinks, 0);
+        digitalWrite(directionPinLinks, links_vooruit);
+        delay(200);
+
+
+}
+
+void MotorController::degrees90Right() {
+
+    digitalWrite(directionPinRechts, rechts_achteruit);
+    analogWrite(pwmPinRechts, 100);
+    analogWrite(pwmPinLinks, 100);
+    delay(300);
+    analogWrite(pwmPinLinks, 0);
+    analogWrite(pwmPinRechts, 0);
+    digitalWrite(directionPinRechts, rechts_vooruit);
+    delay(200);
 
 }
 
@@ -43,7 +68,6 @@ void MotorController::moveForward() {
     digitalWrite(directionPinLinks, links_vooruit);
     analogWrite(pwmPinRechts, 100);
     analogWrite(pwmPinLinks, 100);
-    functionCalledFirstTime = false;
 }
 
 void MotorController::bigLeft() {
@@ -51,7 +75,7 @@ void MotorController::bigLeft() {
     digitalWrite(directionPinLinks, links_vooruit);
     analogWrite(pwmPinRechts, arraybigleft[2]);
     analogWrite(pwmPinLinks, arraybigleft[0]);
-    functionCalledFirstTime = false;
+    delay(100);
 }
 
 void MotorController::bigRight() {
@@ -59,7 +83,7 @@ void MotorController::bigRight() {
     digitalWrite(directionPinLinks, links_vooruit);
     analogWrite(pwmPinRechts, arraybigright[2]);
     analogWrite(pwmPinLinks, arraybigright[0]);
-    functionCalledFirstTime = false;
+    delay(100);
 }
 
 void MotorController::smallRight() {
@@ -67,7 +91,6 @@ void MotorController::smallRight() {
     digitalWrite(directionPinLinks, links_vooruit);
     analogWrite(pwmPinRechts, arraytinyright[2]);
     analogWrite(pwmPinLinks, arraytinyright[0]);
-    functionCalledFirstTime = false;
 }
 
 void MotorController::stop() {
@@ -75,7 +98,6 @@ void MotorController::stop() {
     digitalWrite(directionPinLinks, links_vooruit);
     analogWrite(pwmPinRechts, 0);
     analogWrite(pwmPinLinks, 0);
-    functionCalledFirstTime = false;
 }
 
 void MotorController::smallLeft() {
@@ -83,5 +105,4 @@ void MotorController::smallLeft() {
     digitalWrite(directionPinLinks, links_vooruit);
     analogWrite(pwmPinRechts, arraytinyleft[2]);
     analogWrite(pwmPinLinks, arraytinyleft[0]);
-    functionCalledFirstTime = false;
 }

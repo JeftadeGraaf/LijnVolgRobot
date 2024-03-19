@@ -186,7 +186,7 @@ void getMovement() {
     }
   }
   else if (bitvalue == "00001"){
-    motorcontroller.bigRight();
+    motorcontroller.bigLeft();
   }
 
   else if (bitvalue == "00010"){
@@ -195,6 +195,7 @@ void getMovement() {
 
   else if (bitvalue == "00011"){
     motorcontroller.bigLeft();
+    motorcontroller.counter = 0;
   }
 
   else if (bitvalue == "00100"){
@@ -212,6 +213,7 @@ void getMovement() {
 
   else if (bitvalue == "00111"){
     motorcontroller.smallLeft();
+    motorcontroller.counter = 0;
   }
 
   else if (bitvalue == "01000"){
@@ -244,10 +246,11 @@ void getMovement() {
 
   else if (bitvalue == "01111"){
     motorcontroller.bigLeft();
+    delay(250);
   }
 
   else if (bitvalue == "10000"){
-    motorcontroller.bigLeft();
+    motorcontroller.bigRight();
   }
 
   else if (bitvalue == "10001"){
@@ -280,6 +283,7 @@ void getMovement() {
 
   else if (bitvalue == "11000"){
     motorcontroller.bigRight();
+    motorcontroller.counter = 0;
   }
 
   else if (bitvalue == "11001"){
@@ -297,6 +301,7 @@ void getMovement() {
 
   else if (bitvalue == "11100"){
     motorcontroller.smallRight();
+    motorcontroller.counter = 0;
   }
 
   else if (bitvalue == "11101"){
@@ -305,6 +310,7 @@ void getMovement() {
 
   else if (bitvalue == "11110"){
     motorcontroller.bigRight();
+    delay(250);
   }
 
   else if (bitvalue == "11111"){
