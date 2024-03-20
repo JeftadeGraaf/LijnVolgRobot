@@ -79,6 +79,7 @@ String checkFinish() {
   delay(500);
   motorcontroller.stop();
   delay(200);
+  irArray.refreshValues();
   if ((irArray.values[0] == 1 || irArray.values[4] == 1) && (irArray.values[1] == 0 || irArray.values[2] == 0 || irArray.values[3] == 0) ) {
     return "straight";
   }
@@ -88,7 +89,7 @@ String checkFinish() {
   }
   // Moves the robot slightly backwards to it's starting position
   motorcontroller.moveBackward();
-  delay(700);
+  //delay(00);
   motorcontroller.stop();
   return "turn";
 }
@@ -134,11 +135,10 @@ void turnLeft() {
   digitalWrite(directionPinLinks, links_achteruit);
   analogWrite(pwmPinLinks, 100);
   analogWrite(pwmPinRechts, 100);
-  delay(300);
+  delay(250);
   analogWrite(pwmPinRechts, 0);
   analogWrite(pwmPinLinks, 0);
   digitalWrite(directionPinLinks, links_vooruit);
-  delay(1000);
 }
 
 void turnRight() {
@@ -171,7 +171,27 @@ void getMovement() {
     }
   }
   else if (bitvalue == "00001"){
-    motorcontroller.bigLeft();
+    motorcontroller.stop();
+    delay(1000);
+    String state = checkFinish();
+    if (state == "straight") {
+      motorcontroller.moveForward();
+    } else {
+      
+      turnLeft();
+      while (irArray.values[0] == 1){
+      irArray.refreshValues();
+      motorcontroller.moveForward();
+      }
+
+  	  motorcontroller.stop();
+      delay (100);
+
+      while (irArray.values[0] == 0){
+      irArray.refreshValues();
+      motorcontroller.bigLeft();
+      }
+    }
   }
 
   else if (bitvalue == "00010"){
@@ -185,8 +205,8 @@ void getMovement() {
     if (state == "straight") {
       motorcontroller.moveForward();
     } else {
-
-      turnRight();
+      
+      turnLeft();
       while (irArray.values[0] == 1){
       irArray.refreshValues();
       motorcontroller.moveForward();
