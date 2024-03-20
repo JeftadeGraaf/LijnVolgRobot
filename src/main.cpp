@@ -56,8 +56,7 @@ void setup(){
   display.setup();
   motorcontroller.setup();
   irArray.setup();
-  usSensor.setup();\
-  Serial.begin(9600);
+  usSensor.setup();
 }
 
 // Turns the robot 180 degrees
@@ -172,26 +171,8 @@ void getMovement() {
 
   }
   else if (bitvalue == "00001"){
-    motorcontroller.stop();
-    delay(1000);
-    String state = checkFinish();
-    if (state == "straight") {
-      motorcontroller.moveForward();
-    } else {
-      
-      turnLeft();
-      while (irArray.values[0] == 1){
-      irArray.refreshValues();
-      motorcontroller.moveForward();
-      }
-
-  	  motorcontroller.stop();
-      delay (100);
-
-      while (irArray.values[0] == 0){
-      irArray.refreshValues();
-      motorcontroller.bigLeft();
-      }
+    if (checkFinish() != "finish") {
+      turnRight();
     }
   }
 
@@ -272,7 +253,9 @@ void getMovement() {
   }
 
   else if (bitvalue == "10000"){
-    motorcontroller.bigRight();
+    if (checkFinish() != "finish") {
+      turnRight();
+    }
   }
 
   else if (bitvalue == "10001"){
@@ -364,8 +347,11 @@ void getMovement() {
 
 
 void loop(){
-  // while(driving){  
-    irArray.refreshValues();
-    getMovement();
-  //}
+     
+  irArray.refreshValues();
+  getMovement();
+  checkForObstacle();
+    
+
+    
 }
