@@ -25,8 +25,12 @@ class Display {
         Display(int pin[7], int u1, int u2);
         void setup();
         void setCharacters(char charu1, char charu2);
+        void setStartTime();
+        void displayFinishTime();
         void displayChar(char character, bool display);
         void displayCharacters();
+        char getLastTwoDigitsChar(int number, int position);
+        void aftellen(char number1, char number2);
 };
 
 #endif

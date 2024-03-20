@@ -64,7 +64,7 @@ void turnAround() {
   digitalWrite(directionPinLinks, links_achteruit);
   analogWrite(pwmPinLinks, 100);
   analogWrite(pwmPinRechts, 100);
-  delay(500);
+  delay(450);
   analogWrite(pwmPinRechts, 0);
   analogWrite(pwmPinLinks, 0);
   digitalWrite(directionPinLinks, links_vooruit);
@@ -88,41 +88,10 @@ String checkFinish() {
   }
   // Moves the robot slightly backwards to it's starting position
   motorcontroller.moveBackward();
-  //delay(00);
+  delay(500);
   motorcontroller.stop();
   return "turn";
 }
-
-// Checks if there is a straight path available or if the robot is on the finish line
-// bool checkIntersection() {
-//     bool i;
-    
-//     // Moves the robot slightly forward
-//     analogWrite(pwmPinRechts, 100);
-//     analogWrite(pwmPinLinks, 100);
-//     delay(250);
-//     analogWrite(pwmPinRechts, 0);
-//     analogWrite(pwmPinLinks, 0);
-//     // Checks if there is a straight path or if the robot is on the finish line
-//     if (irArray.values[2] == 0) {
-//       i = true;
-//     } else {
-//       i = false;
-//     }
-//     // Moves the robot slightly backwards to it's starting position
-//     digitalWrite(directionPinRechts, rechts_achteruit);
-//     digitalWrite(directionPinLinks, links_achteruit);
-//     analogWrite(pwmPinRechts, 100);
-//     analogWrite(pwmPinLinks, 100);
-//     delay(250);
-//     analogWrite(pwmPinRechts, 0);
-//     analogWrite(pwmPinLinks, 0);
-//     // Resets the robot motors
-//     digitalWrite(directionPinRechts, rechts_vooruit);
-//     digitalWrite(directionPinLinks, links_vooruit);
-
-//     return i;
-// }
 
 void checkForObstacle() {
   if (usSensor.getDistance() < 10) {
@@ -165,14 +134,27 @@ void getMovement() {
 
 
   if (bitvalue == "00000") {
-    if (checkFinish() != "finish") {
-      turnRight();
+    motorcontroller.stop();
+    delay(200);
+    String state = checkFinish();
+    if (state != "finish") {
+      motorcontroller.moveBackward();
+      delay(500);
+      motorcontroller.stop();
+      
+      // rechtsafslaan
     }
-
   }
   else if (bitvalue == "00001"){
-    if (checkFinish() != "finish") {
-      turnRight();
+    motorcontroller.stop();
+    delay(200);
+    String state = checkFinish();
+    if (state != "finish") {
+      motorcontroller.moveBackward();
+      delay(500);
+      motorcontroller.stop();
+      
+      // rechtsafslaan
     }
   }
 
@@ -194,10 +176,10 @@ void getMovement() {
       motorcontroller.moveForward();
       }
 
-        while (irArray.values[0] == 0){
-        irArray.refreshValues();
-        motorcontroller.bigLeft();
-        }
+      while (irArray.values[0] == 0){
+      irArray.refreshValues();
+      motorcontroller.bigLeft();
+      }
     }
   }
 
@@ -253,8 +235,14 @@ void getMovement() {
   }
 
   else if (bitvalue == "10000"){
-    if (checkFinish() != "finish") {
-      turnRight();
+    delay(200);
+    String state = checkFinish();
+    if (state != "finish") {
+      motorcontroller.moveBackward();
+      delay(500);
+      motorcontroller.stop();
+      
+      // rechtsafslaan
     }
   }
 
@@ -330,7 +318,7 @@ void getMovement() {
     display.setCharacters(digit_2, digit_1);
     display.displayCharacters();
 
-    if(motorcontroller.counter > 30){
+    if(motorcontroller.counter > 10){
 
 
     motorcontroller.counter = 0;
@@ -347,11 +335,11 @@ void getMovement() {
 
 
 void loop(){
-     
-  irArray.refreshValues();
-  getMovement();
-  checkForObstacle();
-    
+  display.aftellen('1', '0');
 
-    
+  while (driving) {
+    irArray.refreshValues();
+    getMovement();
+    checkForObstacle();
+  }
 }
