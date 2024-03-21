@@ -59,6 +59,99 @@ void setup(){
   usSensor.setup();
 }
 
+void turnLeft() {
+  while (!(irArray.values[0] == 1 && (irArray.values[1] == 1 && irArray.values[2] == 0 && irArray.values[3] == 0) && irArray.values[4] == 1)){
+    irArray.refreshValues();
+    
+    digitalWrite(directionPinRechts, rechts_vooruit);
+    digitalWrite(directionPinLinks, links_achteruit);
+  
+    analogWrite(pwmPinLinks, 35);
+    analogWrite(pwmPinRechts, 35);
+  }
+
+  analogWrite(pwmPinRechts, 0);
+  analogWrite(pwmPinLinks, 0);
+  digitalWrite(directionPinLinks, links_vooruit);
+  digitalWrite(directionPinRechts, rechts_vooruit);
+  delay(1000);
+}
+
+void turnRight() {
+  // analogWrite(pwmPinLinks, 75);
+  // analogWrite(pwmPinRechts, 75);
+  // delay(150);
+
+  while (!(irArray.values[0] == 1 && (irArray.values[1] == 0 || irArray.values[2] == 0 || irArray.values[3] == 0) && irArray.values[4] == 1)){
+    irArray.refreshValues();
+    
+    digitalWrite(directionPinRechts, rechts_achteruit);
+    digitalWrite(directionPinLinks, links_vooruit);
+  
+    analogWrite(pwmPinLinks, 35);
+    analogWrite(pwmPinRechts, 35);
+  }
+
+  analogWrite(pwmPinRechts, 0);
+  analogWrite(pwmPinLinks, 0);
+  digitalWrite(directionPinRechts, rechts_vooruit);
+  delay(1000);
+}
+
+void leftIntersection(){
+  
+  motorcontroller.moveForward();
+  delay(500);
+  motorcontroller.stop();
+  irArray.refreshValues();
+  delay(500);
+
+  if (irArray.values[1] == 0 || irArray.values[2] == 0 || irArray.values[3] == 0) {
+    motorcontroller.moveForward();
+    delay(250);
+    irArray.refreshValues();
+  } 
+  
+  else {
+    irArray.refreshValues();
+    while (!(irArray.values[0] == 0 || irArray.values[1] == 0 || irArray.values[2] == 0 || irArray.values[3] == 0 || irArray.values[4] == 0)) {
+      motorcontroller.moveBackward();
+      irArray.refreshValues();
+    }
+    motorcontroller.stop();
+    delay(250);
+    turnLeft();
+  }
+
+
+}
+
+void fullIntersection(){
+  motorcontroller.moveForward();
+  delay(500);
+  motorcontroller.stop();
+  irArray.refreshValues();
+  delay(500);
+
+  if (irArray.values[0] == 0 || irArray.values[1] == 0 || irArray.values[2] == 0 || irArray.values[3] == 0 || irArray.values[4] == 0) {
+    driving = false;
+  } 
+  
+  else {
+    irArray.refreshValues();
+    while (!(irArray.values[0] == 0 && irArray.values[1] == 0 && irArray.values[2] == 0 && irArray.values[3] == 0 && irArray.values[4] == 0)) {
+      motorcontroller.moveBackward();
+      irArray.refreshValues();
+    }
+    motorcontroller.stop();
+    delay(250);
+    turnRight();
+  }
+
+
+}
+
+
 // Turns the robot 180 degrees
 void turnAround() {
   digitalWrite(directionPinLinks, links_achteruit);
@@ -126,33 +219,11 @@ String checkFinish() {
 
 void checkForObstacle() {
   if (usSensor.getDistance() < 10) {
-    turnAround();
+    //turnAround();
   }
 }
 
-void turnLeft() {
-  digitalWrite(directionPinLinks, links_achteruit);
-  analogWrite(pwmPinLinks, 100);
-  analogWrite(pwmPinRechts, 100);
-  delay(250);
-  analogWrite(pwmPinRechts, 0);
-  analogWrite(pwmPinLinks, 0);
-  digitalWrite(directionPinLinks, links_vooruit);
-}
 
-void turnRight() {
-  // analogWrite(pwmPinLinks, 75);
-  // analogWrite(pwmPinRechts, 75);
-  // delay(150);
-  digitalWrite(directionPinRechts, rechts_achteruit);
-  analogWrite(pwmPinLinks, 100);
-  analogWrite(pwmPinRechts, 100);
-  delay(300);
-  analogWrite(pwmPinRechts, 0);
-  analogWrite(pwmPinLinks, 0);
-  digitalWrite(directionPinLinks, rechts_vooruit);
-  delay(1000);
-}
 
 void getMovement() {
  
@@ -165,9 +236,7 @@ void getMovement() {
 
 
   if (bitvalue == "00000") {
-    if (checkFinish() != "finish") {
-      turnRight();
-    }
+    fullIntersection();
 
   }
   else if (bitvalue == "00001"){
@@ -181,24 +250,7 @@ void getMovement() {
   }
 
   else if (bitvalue == "00011"){
-    motorcontroller.stop();
-    delay(1000);
-    String state = checkFinish();
-    if (state == "straight") {
-      motorcontroller.moveForward();
-    } else {
-      
-      turnLeft();
-      while (irArray.values[0] == 1){
-      irArray.refreshValues();
-      motorcontroller.moveForward();
-      }
-
-        while (irArray.values[0] == 0){
-        irArray.refreshValues();
-        motorcontroller.bigLeft();
-        }
-    }
+    leftIntersection();
   }
 
   else if (bitvalue == "00100"){
@@ -287,14 +339,7 @@ void getMovement() {
   }
 
   else if (bitvalue == "11000"){
-    //while (irArray.values[4] == 0 && (irArray.values[0] == 1 || irArray.values[1] == 1 || irArray.values[2] == 1 || irArray.values[3] == 1)){
-    // irArray.refreshValues();
-    motorcontroller.bigRight();
-    //}
-    // motorcontroller.bigRight();
-    // motorcontroller.counter = 0;
-    // delay(700);
-    // motorcontroller.stop();
+    turnRight();
   }
 
   else if (bitvalue == "11001"){
@@ -343,6 +388,7 @@ void getMovement() {
   }
 
 }
+
 
 
 
