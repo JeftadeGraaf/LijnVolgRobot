@@ -75,7 +75,7 @@ void turnAround() {
 String checkFinish() {
   // Moves the robot slightly forward
   motorcontroller.moveForward();
-  delay(500);
+  delay(350);
   motorcontroller.stop();
   delay(250);
   irArray.refreshValues();
@@ -330,7 +330,7 @@ void getMovement() {
     display.setCharacters(digit_2, digit_1);
     display.displayCharacters();
 
-    if(motorcontroller.counter > 30){
+    if(motorcontroller.counter > 10){
 
 
     motorcontroller.counter = 0;

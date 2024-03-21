@@ -20,7 +20,7 @@ void MotorController::setup() {
 void MotorController::turnAround() {
 
         digitalWrite(directionPinLinks, links_achteruit);
-        digitalWrite(directionPinRechts, rechts_achteruit);
+        digitalWrite(directionPinRechts, rechts_vooruit);
         analogWrite(pwmPinLinks, 100);
         analogWrite(pwmPinRechts, 100);
         delay(500);
