@@ -56,8 +56,7 @@ void setup(){
   display.setup();
   motorcontroller.setup();
   irArray.setup();
-  usSensor.setup();\
-  Serial.begin(9600);
+  usSensor.setup();
 }
 
 // Turns the robot 180 degrees
@@ -89,7 +88,7 @@ String checkFinish() {
   }
   // Moves the robot slightly backwards to it's starting position
   motorcontroller.moveBackward();
-  delay(500);
+  //delay(00);
   motorcontroller.stop();
   return "turn";
 }
@@ -135,11 +134,10 @@ void turnLeft() {
   digitalWrite(directionPinLinks, links_achteruit);
   analogWrite(pwmPinLinks, 100);
   analogWrite(pwmPinRechts, 100);
-  delay(300);
+  delay(250);
   analogWrite(pwmPinRechts, 0);
   analogWrite(pwmPinLinks, 0);
   digitalWrite(directionPinLinks, links_vooruit);
-  delay(1000);
 }
 
 void turnRight() {
@@ -173,7 +171,9 @@ void getMovement() {
 
   }
   else if (bitvalue == "00001"){
-    motorcontroller.bigLeft();
+    if (checkFinish() != "finish") {
+      turnRight();
+    }
   }
 
   else if (bitvalue == "00010"){
@@ -186,14 +186,13 @@ void getMovement() {
     String state = checkFinish();
     if (state == "straight") {
       motorcontroller.moveForward();
-    } else if (state == "turn"){
-        while (irArray.values[0] == 1){
-        irArray.refreshValues();
-        motorcontroller.moveForward();
-        }
-
-        motorcontroller.stop();
-        delay (100);
+    } else {
+      
+      turnLeft();
+      while (irArray.values[0] == 1){
+      irArray.refreshValues();
+      motorcontroller.moveForward();
+      }
 
         while (irArray.values[0] == 0){
         irArray.refreshValues();
@@ -254,7 +253,9 @@ void getMovement() {
   }
 
   else if (bitvalue == "10000"){
-    motorcontroller.bigRight();
+    if (checkFinish() != "finish") {
+      turnRight();
+    }
   }
 
   else if (bitvalue == "10001"){
@@ -346,8 +347,11 @@ void getMovement() {
 
 
 void loop(){
-  // while(driving){  
-    irArray.refreshValues();
-    getMovement();
-  //}
+     
+  irArray.refreshValues();
+  getMovement();
+  checkForObstacle();
+    
+
+    
 }
