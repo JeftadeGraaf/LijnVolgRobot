@@ -112,6 +112,6 @@ void MotorController::stop() {
 void MotorController::smallLeft() {
     digitalWrite(directionPinRechts, rechts_vooruit);
     digitalWrite(directionPinLinks, links_vooruit);
-    analogWrite(pwmPinRechts, arraytinyleft[2]);
-    analogWrite(pwmPinLinks, arraytinyleft[0]);
+    analogWrite(pwmPinRechts, arraytinyleft[2]);    //als iets niet werkt terug zetten naar 2
+    analogWrite(pwmPinLinks, arraytinyleft[0]);     //"                                   " 0
 }

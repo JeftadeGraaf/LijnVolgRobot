@@ -76,27 +76,22 @@ void searchDirection() {
 
 }
 
-bool checkFinish() {
-  bool intersection;
-    
+bool checkFinish() { 
   // Moves the robot slightly forward
   motorcontroller.moveForward();
   delay(350);
   motorcontroller.stop();
   delay(250);
   irArray.refreshValues();
-  if ((irArray.values[0] == 1 || irArray.values[4] == 1) && (irArray.values[1] == 0 || irArray.values[2] == 0 || irArray.values[3] == 0) ) {
-    intersection = false;
-  }
-  else if (irArray.values[0] == 0 && irArray.values[1] == 0 && irArray.values[2] == 0 && irArray.values[3] == 0 && irArray.values[4] == 0) {
+  if (irArray.values[0] == 0 && irArray.values[1] == 0 && irArray.values[2] == 0 && irArray.values[3] == 0 && irArray.values[4] == 0) {
     driving = false;
-    intersection = true;
+    return true;
   }
   // returns the robot to starting position
   motorcontroller.moveBackward();
   delay(350);
   motorcontroller.stop();
-  return intersection;
+  return false;
 }
 
 void getMovement() {
@@ -115,8 +110,8 @@ void getMovement() {
       driving = false;
     }
     else {
-      digitalWrite(directionPinLinks, links_achteruit);
-      digitalWrite(directionPinRechts, rechts_vooruit);
+      digitalWrite(directionPinLinks, links_vooruit);
+      digitalWrite(directionPinRechts, rechts_achteruit);
       analogWrite(pwmPinLinks, 50);
       analogWrite(pwmPinRechts, 50);
       delay(500);
@@ -154,7 +149,7 @@ void getMovement() {
   }
 
   else if (bitvalue == "00111"){
-    motorcontroller.moveForward();
+    motorcontroller.smallLeft();
 
   }
 
@@ -198,7 +193,15 @@ void getMovement() {
   }
 
   else if (bitvalue == "10000"){
-    motorcontroller.moveForward();
+    irArray.refreshValues();
+    while (irArray.values[4] == 0) {
+      if (irArray.values[0] == 0 && irArray.values[1] == 0 && irArray.values[2] == 0 && irArray.values[3] == 0 && irArray.values[4] == 0) {
+        searchDirection();
+      }
+
+      motorcontroller.bigRight();
+      irArray.refreshValues();
+    }
 
   }
 
@@ -233,7 +236,7 @@ void getMovement() {
   }
 
   else if (bitvalue == "10111"){
-    motorcontroller.smallRight();
+    motorcontroller.smallLeft();
 
   }
 
@@ -285,9 +288,8 @@ void getMovement() {
 
 void loop(){
      
-  irArray.refreshValues();
-  getMovement();
-    
-
-    
+  while (driving) {
+    irArray.refreshValues();
+    getMovement();
+  }  
 }
