@@ -300,16 +300,13 @@ void getMovement() {
 
     if(motorcontroller.counter > 10){
 
-
     motorcontroller.counter = 0;
     motorcontroller.turnAround();
-    
     
     } else {
       motorcontroller.counter++;
     }
   }
-
 }
 
 
