@@ -114,7 +114,7 @@ void getMovement() {
       digitalWrite(directionPinRechts, rechts_achteruit);
       analogWrite(pwmPinLinks, 50);
       analogWrite(pwmPinRechts, 50);
-      delay(500);
+      delay(700);
     }
   }
   else if (bitvalue == "00001"){
@@ -287,9 +287,12 @@ void getMovement() {
 }
 
 void loop(){
-     
-  while (driving) {
-    irArray.refreshValues();
+  // display.aftellen('1', '0');
+  display.setStartTime();
+
+     irArray.refreshValues();
     getMovement();
-  }  
-}
+    //checkForObstacle();
+  }
+
+  // display.displayFinishTime(); 

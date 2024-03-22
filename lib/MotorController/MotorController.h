@@ -8,10 +8,10 @@ class MotorController {
 private:
     float batterymultiplier = 1.0f; // Use float instead of int for decimal precision
     // Add your member variables here
-    int arraytinyright[4] = {static_cast<int>(45 * batterymultiplier), 1, static_cast<int>(30 * batterymultiplier), 1};
+    int arraytinyright[4] = {static_cast<int>(100 * batterymultiplier), 1, static_cast<int>(70 * batterymultiplier), 1};
     int arraybigright[4] = {static_cast<int>(50 * batterymultiplier), 1, static_cast<int>(0 * batterymultiplier), 1};
-    int arrayahead[4] = {static_cast<int>(60 * batterymultiplier), 1, static_cast<int>(60 * batterymultiplier), 1};
-    int arraytinyleft[4] = {static_cast<int>(30 * batterymultiplier), 1, static_cast<int>(45 * batterymultiplier), 1};
+    int arrayahead[4] = {static_cast<int>(100 * batterymultiplier), 1, static_cast<int>(100 * batterymultiplier), 1};
+    int arraytinyleft[4] = {static_cast<int>(60 * batterymultiplier), 1, static_cast<int>(100 * batterymultiplier), 1};
     int arraybigleft[4] = {static_cast<int>(0 * batterymultiplier), 1, static_cast<int>(50 * batterymultiplier), 1};
     int arrayreverse[4] = {static_cast<int>(57 * batterymultiplier), 1, static_cast<int>(60 * batterymultiplier), 1};
 
