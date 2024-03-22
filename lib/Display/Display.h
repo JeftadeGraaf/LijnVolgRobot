@@ -28,6 +28,8 @@ class Display {
         void displayChar(char character, bool display);
         void displayCharacters();
         void aftellen(char tienden, char enen);
-        // void setStartTime();
+        void setStartTime();
+        void displayFinishTime();
+        char getLastTwoDigitsChar(int number, int position);
 };
 #endif

@@ -5,24 +5,6 @@
 #include <USSensor.h>
 #include <MotorController.h>
 
-
-char getLastTwoDigitsChar(int number, int position) {
-  // Convert the number to a string
-  String numberString = String(number);
-  
-  // Get the length of the string
-  int length = numberString.length();
-
-  // Calculate the position from the end of the string
-  int charPosition = length - position;
-
-  // Check if the position is valid
-  if (charPosition >= 0 && charPosition < length) {
-    return numberString.charAt(charPosition);
-  } else {
-    return '0'; // Return '0' if position is out of range
-  }
-}
 // put function declarations here:
 int digitPins[7] = {17, 16, 15, 14, 2, 1, 0};
 Display display(digitPins, 18, 19);
@@ -311,8 +293,8 @@ void getMovement() {
   }
 
   else if (bitvalue == "11111"){
-    char digit_1 = getLastTwoDigitsChar(motorcontroller.counter, 1);
-    char digit_2 = getLastTwoDigitsChar(motorcontroller.counter, 2);
+    char digit_1 = display.getLastTwoDigitsChar(motorcontroller.counter, 1);
+    char digit_2 = display.getLastTwoDigitsChar(motorcontroller.counter, 2);
     display.setCharacters(digit_2, digit_1);
     display.displayCharacters();
 
@@ -332,12 +314,15 @@ void getMovement() {
 
 
 
-void loop(){
-     
-  irArray.refreshValues();
-  getMovement();
-  checkForObstacle();
-    
+void loop() {
+  display.aftellen('1', '0');
+  display.setStartTime();
 
-    
+  while (driving) {  
+    irArray.refreshValues();
+    getMovement();
+    checkForObstacle();
+  }
+
+  display.displayFinishTime(); 
 }
