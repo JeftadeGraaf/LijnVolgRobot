@@ -79,7 +79,7 @@ void searchDirection() {
 bool checkFinish() { 
   // Moves the robot slightly forward
   motorcontroller.moveForward();
-  delay(350);
+  delay(250);
   motorcontroller.stop();
   delay(250);
   irArray.refreshValues();
@@ -92,6 +92,13 @@ bool checkFinish() {
   delay(350);
   motorcontroller.stop();
   return false;
+}
+
+
+void checkForObstacle() {
+  if (usSensor.getDistance() < 10) {
+    motorcontroller.turnAround();
+  }
 }
 
 void getMovement() {
@@ -289,10 +296,14 @@ void getMovement() {
 void loop(){
   // display.aftellen('1', '0');
   display.setStartTime();
-
-     irArray.refreshValues();
+  while (driving) {
+    irArray.refreshValues();
     getMovement();
-    //checkForObstacle();
-  }
 
-  // display.displayFinishTime(); 
+
+    checkForObstacle();
+  }
+  display.displayFinishTime(); 
+}
+
+ 

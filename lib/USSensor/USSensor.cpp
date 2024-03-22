@@ -13,11 +13,13 @@ void USSensor::setup() {
 }
 
 float USSensor::getDistance() {
+    float distance = 0;
     digitalWrite(triggerPin, HIGH);
     delayMicroseconds(10);
     digitalWrite(triggerPin, LOW);
     int duration = pulseIn(echoPin, HIGH);
-    float distance = duration * 0.034 / 2;
-    delay(10);
+    float newDistance = duration * 0.034 / 2;
+    distance += newDistance;
+    delay(5);
     return distance;
 }
