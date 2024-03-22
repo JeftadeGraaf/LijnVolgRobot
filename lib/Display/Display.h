@@ -22,7 +22,15 @@ class Display {
     public:
         Display(int pin[7], int u1, int u2);
         void setup();
+<<<<<<< Updated upstream
         void displayChar(char character);
+=======
+        void setCharacters(char charu1, char charu2);
+        void displayChar(char character, bool display);
+        void displayCharacters();
+        void aftellen(char tienden, char enen);
+        void setStartTime();
+>>>>>>> Stashed changes
 };
 
 #endif
