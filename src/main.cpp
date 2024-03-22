@@ -72,7 +72,7 @@ void turnAround() {
 }
 
 // Checks if all sensors are displaying black
-String checkFinish() {
+String checkIntersection() {
   // Moves the robot slightly forward
   motorcontroller.moveForward();
   delay(350);
@@ -82,44 +82,33 @@ String checkFinish() {
   if ((irArray.values[0] == 1 || irArray.values[4] == 1) && (irArray.values[1] == 0 || irArray.values[2] == 0 || irArray.values[3] == 0) ) {
     return "straight";
   }
-  else if (irArray.values[0] == 0 && irArray.values[1] == 0 && irArray.values[2] == 0 && irArray.values[3] == 0 && irArray.values[4] == 0) {
-    driving = false;
-    return "finish";
-  }
   // returns turn of nothing is found
   return "turn";
 }
 
 // Checks if there is a straight path available or if the robot is on the finish line
-// bool checkIntersection() {
-//     bool i;
+bool checkFinish() {
+  bool intersection;
     
-//     // Moves the robot slightly forward
-//     analogWrite(pwmPinRechts, 100);
-//     analogWrite(pwmPinLinks, 100);
-//     delay(250);
-//     analogWrite(pwmPinRechts, 0);
-//     analogWrite(pwmPinLinks, 0);
-//     // Checks if there is a straight path or if the robot is on the finish line
-//     if (irArray.values[2] == 0) {
-//       i = true;
-//     } else {
-//       i = false;
-//     }
-//     // Moves the robot slightly backwards to it's starting position
-//     digitalWrite(directionPinRechts, rechts_achteruit);
-//     digitalWrite(directionPinLinks, links_achteruit);
-//     analogWrite(pwmPinRechts, 100);
-//     analogWrite(pwmPinLinks, 100);
-//     delay(250);
-//     analogWrite(pwmPinRechts, 0);
-//     analogWrite(pwmPinLinks, 0);
-//     // Resets the robot motors
-//     digitalWrite(directionPinRechts, rechts_vooruit);
-//     digitalWrite(directionPinLinks, links_vooruit);
-
-//     return i;
-// }
+  // Moves the robot slightly forward
+  motorcontroller.moveForward();
+  delay(350);
+  motorcontroller.stop();
+  delay(250);
+  irArray.refreshValues();
+  if ((irArray.values[0] == 1 || irArray.values[4] == 1) && (irArray.values[1] == 0 || irArray.values[2] == 0 || irArray.values[3] == 0) ) {
+    intersection = true;
+  }
+  else if (irArray.values[0] == 0 && irArray.values[1] == 0 && irArray.values[2] == 0 && irArray.values[3] == 0 && irArray.values[4] == 0) {
+    driving = false;
+    intersection = false;
+  }
+  // returns the robot to starting position
+  motorcontroller.moveBackward();
+  delay(350);
+  motorcontroller.stop();
+  return intersection;
+}
 
 void checkForObstacle() {
   if (usSensor.getDistance() < 10) {
@@ -162,15 +151,15 @@ void getMovement() {
 
 
   if (bitvalue == "00000") {
-    if (checkFinish() != "finish") {
+    if (checkFinish()) {
       turnRight();
     }
 
   }
   else if (bitvalue == "00001"){
-    if (checkFinish() != "finish") {
-      turnRight();
-    }
+    // if (checkFinish()) {
+    //   turnRight();
+    // }
   }
 
   else if (bitvalue == "00010"){
@@ -180,7 +169,7 @@ void getMovement() {
   else if (bitvalue == "00011"){
     motorcontroller.stop();
     delay(1000);
-    String state = checkFinish();
+    String state = checkIntersection();
     if (state == "straight") {
       motorcontroller.moveForward();
     } else {
@@ -250,9 +239,9 @@ void getMovement() {
   }
 
   else if (bitvalue == "10000"){
-    if (checkFinish() != "finish") {
-      turnRight();
-    }
+    // if (checkFinish()) {
+    //   turnRight();
+    // }
   }
 
   else if (bitvalue == "10001"){
