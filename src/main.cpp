@@ -64,7 +64,7 @@ void turnAround() {
   digitalWrite(directionPinLinks, links_achteruit);
   analogWrite(pwmPinLinks, 100);
   analogWrite(pwmPinRechts, 100);
-  delay(500);
+  delay(450);
   analogWrite(pwmPinRechts, 0);
   analogWrite(pwmPinLinks, 0);
   digitalWrite(directionPinLinks, links_vooruit);
@@ -86,10 +86,7 @@ String checkFinish() {
     driving = false;
     return "finish";
   }
-  // Moves the robot slightly backwards to it's starting position
-  motorcontroller.moveBackward();
-  //delay(00);
-  motorcontroller.stop();
+  // returns turn of nothing is found
   return "turn";
 }
 
@@ -187,7 +184,7 @@ void getMovement() {
     if (state == "straight") {
       motorcontroller.moveForward();
     } else {
-      
+    
       turnLeft();
       while (irArray.values[0] == 1){
       irArray.refreshValues();

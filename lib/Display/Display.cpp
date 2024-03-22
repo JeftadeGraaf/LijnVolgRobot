@@ -57,3 +57,33 @@ void Display::displayCharacters() {
     displayChar(charu2, false);
     delay(5);
 }
+
+void Display::aftellen(char tienden, char enen) {
+    while (true) {
+        setCharacters(tienden, enen);
+        int startMillis = millis();
+        while(millis() - startMillis < 1000) {
+            displayCharacters();
+        }
+        if (enen == '0') {
+            if (tienden == '0') {
+                break;
+            }
+            enen = '9';
+            tienden = tienden - 1;
+        } else {
+            enen = enen - 1;
+        } 
+    }
+    int startMillis = millis();
+    while(millis() - startMillis < 3000) {
+        setCharacters('S', 'T');
+        displayCharacters();
+    }
+    setCharacters(' ', ' ');
+    displayCharacters();
+}
+
+// void setStartTime() {
+//     startTime = millis();
+// }
