@@ -5,6 +5,7 @@
 #include <USSensor.h>
 #include <MotorController.h>
 
+int startMillis;
 
 char getLastTwoDigitsChar(int number, int position) {
   // Convert the number to a string
@@ -79,9 +80,15 @@ void searchDirection() {
 bool checkFinish() { 
   // Moves the robot slightly forward
   motorcontroller.moveForward();
-  delay(350);
+  startMillis = millis();
+  while(millis() - startMillis < 350) {
+    display.displayTime();
+  }
   motorcontroller.stop();
-  delay(250);
+  startMillis = millis();
+  while(millis() - startMillis < 250) {
+    display.displayTime();
+  }
   irArray.refreshValues();
   if (irArray.values[0] == 0 && irArray.values[1] == 0 && irArray.values[2] == 0 && irArray.values[3] == 0 && irArray.values[4] == 0) {
     driving = false;
@@ -89,7 +96,10 @@ bool checkFinish() {
   }
   // returns the robot to starting position
   motorcontroller.moveBackward();
-  delay(350);
+  startMillis = millis();
+  while(millis() - startMillis < 350) {
+    display.displayTime();
+  }
   motorcontroller.stop();
   return false;
 }
@@ -114,7 +124,10 @@ void getMovement() {
       digitalWrite(directionPinRechts, rechts_achteruit);
       analogWrite(pwmPinLinks, 50);
       analogWrite(pwmPinRechts, 50);
-      delay(500);
+      int startMillis = millis();
+      while(millis() - startMillis < 500) {
+        display.displayTime();
+      }
     }
   }
   else if (bitvalue == "00001"){
