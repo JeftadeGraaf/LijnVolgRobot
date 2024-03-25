@@ -79,10 +79,6 @@ void searchDirection() {
 bool checkFinish() { 
   // Moves the robot slightly forward
   motorcontroller.moveForward();
-  int startTime = millis();
-  while(millis() - startTime < 350) {
-    
-  }
   delay(350);
   motorcontroller.stop();
   delay(250);
@@ -245,11 +241,12 @@ void getMovement() {
   }
 
   else if (bitvalue == "11000"){
-    irArray.refreshValues();
-    while (irArray.values[4] == 0) {
-      motorcontroller.bigRight();
-      irArray.refreshValues();
-    }
+    // irArray.refreshValues();
+    // while (irArray.values[4] == 0) {
+    //   motorcontroller.bigRight();
+    //   irArray.refreshValues();
+    // }
+    motorcontroller.bigRight();
 
   }
 
@@ -291,7 +288,7 @@ void getMovement() {
 }
 
 void loop(){
-  display.aftellen('1', '0');
+  //display.aftellen('1', '0');
   display.setStartTime();
 
   while (driving) {
