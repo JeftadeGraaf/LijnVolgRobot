@@ -201,7 +201,7 @@ void getMovement() {
   }
 
   else if (bitvalue == "01111"){
-    motorcontroller.bigLeft();
+    motorcontroller.bigLeft(display);
 
   }
 
@@ -212,7 +212,7 @@ void getMovement() {
         searchDirection();
       }
 
-      motorcontroller.bigRight();
+      motorcontroller.bigRight(display);
       irArray.refreshValues();
     }
 
@@ -259,7 +259,7 @@ void getMovement() {
     //   motorcontroller.bigRight();
     //   irArray.refreshValues();
     // }
-    motorcontroller.bigRight();
+    motorcontroller.bigRight(display);
 
   }
 
@@ -288,7 +288,7 @@ void getMovement() {
   }
 
   else if (bitvalue == "11110"){
-    motorcontroller.bigRight();
+    motorcontroller.bigRight(display);
   }
 
   else if (bitvalue == "11111"){

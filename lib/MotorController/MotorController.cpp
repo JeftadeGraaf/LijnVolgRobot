@@ -1,5 +1,6 @@
 #include "Arduino.h"
 #include "MotorController.h"
+#include <Display.h>
 
 MotorController::MotorController(int directionPinRechts, int pwmPinRechts, int directionPinLinks, int pwmPinLinks) {
     // Constructor
@@ -17,29 +18,41 @@ void MotorController::setup() {
     pinMode(pwmPinLinks, OUTPUT);
 }
 
-void MotorController::degrees90Left() {
+void MotorController::degrees90Left(Display display) {
 
     digitalWrite(directionPinLinks, links_achteruit);
     analogWrite(pwmPinLinks, 100);
     analogWrite(pwmPinRechts, 100);
-    delay(300);
+    startMillis = millis();
+    while(millis() - startMillis < 300) {
+        display.displayTime();
+    }
     analogWrite(pwmPinRechts, 0);
     analogWrite(pwmPinLinks, 0);
     digitalWrite(directionPinLinks, links_vooruit);
-    delay(200);
+    startMillis = millis();
+    while(millis() - startMillis < 200) {
+        display.displayTime();
+    }
         
 }
 
-void MotorController::degrees90Right() {
+void MotorController::degrees90Right(Display display) {
 
     digitalWrite(directionPinRechts, rechts_achteruit);
     analogWrite(pwmPinRechts, 100);
     analogWrite(pwmPinLinks, 100);
-    delay(300);
+    startMillis = millis();
+    while(millis() - startMillis < 300) {
+        display.displayTime();
+    }
     analogWrite(pwmPinLinks, 0);
     analogWrite(pwmPinRechts, 0);
     digitalWrite(directionPinRechts, rechts_vooruit);
-    delay(200);
+    startMillis = millis();
+    while(millis() - startMillis < 200) {
+        display.displayTime();
+    }
 
 }
 
@@ -62,20 +75,26 @@ void MotorController::moveBackward() {
     analogWrite(pwmPinLinks, arrayreverse[0]);
 }
 
-void MotorController::bigLeft() {
+void MotorController::bigLeft(Display display) {
     digitalWrite(directionPinRechts, rechts_vooruit);
     digitalWrite(directionPinLinks, links_achteruit);
     analogWrite(pwmPinRechts, arraybigleft[2]);
     analogWrite(pwmPinLinks, arraybigleft[0]);
-    delay(100);
+    startMillis = millis();
+    while(millis() - startMillis < 100) {
+        display.displayTime();
+    }
 }
 
-void MotorController::bigRight() {
+void MotorController::bigRight(Display display) {
     digitalWrite(directionPinRechts, rechts_achteruit);
     digitalWrite(directionPinLinks, links_vooruit);
     analogWrite(pwmPinRechts, arraybigright[2]);
     analogWrite(pwmPinLinks, arraybigright[0]);
-    delay(100);
+    startMillis = millis();
+    while(millis() - startMillis < 100) {
+        display.displayTime();
+    }
 }
 
 void MotorController::smallRight() {

@@ -2,6 +2,7 @@
 #define MOTORCONTROLLER_H
 
 // Include any necessary libraries here
+#include <Display.h>
 // Define your class and its member functions
 class MotorController {
 private:
@@ -25,6 +26,7 @@ private:
     const int links_achteruit = 0;
 
     long int t1;
+    int startMillis;
 public:
     // Constructor(s)
     MotorController(int directionPinRechts, int pwmPinRechts, int directionPinLinks, int pwmPinLinks);
@@ -34,13 +36,13 @@ public:
     bool checkFinish();
     void moveForward();
     void moveBackward();
-    void bigLeft();
-    void bigRight();
+    void bigLeft(Display display);
+    void bigRight(Display display);
     void smallLeft();
     void smallRight();
     void stop();
-    void degrees90Left();
-    void degrees90Right();
+    void degrees90Left(Display display);
+    void degrees90Right(Display display);
 };
 
 #endif
