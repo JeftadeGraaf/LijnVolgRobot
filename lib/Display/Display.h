@@ -29,6 +29,8 @@ class Display {
         void displayCharacters();
         void aftellen(char tienden, char enen);
         void setStartTime();
+        void displayFinishTime();
+        char getLastTwoDigitsChar(int number, int position);
 };
 
 #endif

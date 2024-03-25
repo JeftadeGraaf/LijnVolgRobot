@@ -89,3 +89,48 @@ void Display::aftellen(char tienden, char enen) {
 void Display::setStartTime() {
    startTime = millis();
 }
+
+void Display::displayFinishTime() {
+    int finishTime = millis() - startTime;
+    int seconds = finishTime / 1000;
+    int tienden = getLastTwoDigitsChar(seconds, 2);
+    int enen = getLastTwoDigitsChar(seconds, 1);
+
+    for (int i = 3; i > 0; i--) {
+        int startMillis = millis();
+        while(millis() - startMillis < 1000) {
+            setCharacters(tienden, enen);
+            displayCharacters();
+        }
+        int startMillis2 = millis();
+        while(millis() - startMillis2 < 1000) {
+            setCharacters(' ', ' ');
+            displayCharacters();
+        }
+    }
+    int startMillis3 = millis();
+    while(millis() - startMillis3 < 1000) {
+        setCharacters('F', 'I');
+        displayCharacters();
+        delay(1000);
+    }
+}
+
+char Display::getLastTwoDigitsChar(int number, int position) {
+  // Convert the number to a string
+  String numberString = String(number);
+  
+  // Get the length of the string
+  int length = numberString.length();
+
+  // Calculate the position from the end of the string
+  int charPosition = length - position;
+
+  // Check if the position is valid
+  if (charPosition >= 0 && charPosition < length) {
+    return numberString.charAt(charPosition);
+  } else {
+    return '0'; // Return '0' if position is out of range
+  }
+
+}
