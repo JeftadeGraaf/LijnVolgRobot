@@ -19,7 +19,7 @@ class Display {
         String segmentDisplayChar = "0123456789FIST ";
         char charu1;
         char charu2;
-        
+        long int startTime;
 
     public:
         Display(int pin[7], int u1, int u2);
@@ -31,6 +31,7 @@ class Display {
         void setStartTime();
         void displayFinishTime();
         char getLastTwoDigitsChar(int number, int position);
+        void displayTime();
 };
 
 #endif

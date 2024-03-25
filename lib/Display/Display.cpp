@@ -1,7 +1,6 @@
 #include <Display.h>
 #include <Arduino.h>
 
-int startTime;
 
 Display::Display(int pin[7], int u1, int u2) {
     for (int i = 0; i < 7; i++) {
@@ -87,11 +86,11 @@ void Display::aftellen(char tienden, char enen) {
 }
 
 void Display::setStartTime() {
-   startTime = millis();
+   Display::startTime = millis();
 }
 
 void Display::displayFinishTime() {
-    int finishTime = millis() - startTime;
+    long int finishTime = millis() - Display::startTime;
     int seconds = finishTime / 1000;
     int tienden = getLastTwoDigitsChar(seconds, 2);
     int enen = getLastTwoDigitsChar(seconds, 1);
@@ -115,6 +114,16 @@ void Display::displayFinishTime() {
     }
 }
 
+void Display::displayTime(){
+    long int pastTime = millis() - Display::startTime;
+    int seconds = pastTime / 1000;
+    int tienden = getLastTwoDigitsChar(seconds, 2);
+    int enen = getLastTwoDigitsChar(seconds, 1);
+
+    setCharacters(tienden, enen);
+    displayCharacters();
+}
+
 char Display::getLastTwoDigitsChar(int number, int position) {
   // Convert the number to a string
   String numberString = String(number);
@@ -131,5 +140,4 @@ char Display::getLastTwoDigitsChar(int number, int position) {
   } else {
     return '0'; // Return '0' if position is out of range
   }
-
 }

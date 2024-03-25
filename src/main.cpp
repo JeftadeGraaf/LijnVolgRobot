@@ -294,6 +294,7 @@ void loop(){
   while (driving) {
     irArray.refreshValues();
     getMovement();
+    display.displayTime();
   }
 
   display.displayFinishTime();
