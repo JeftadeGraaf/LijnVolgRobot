@@ -2,7 +2,6 @@
 #define MOTORCONTROLLER_H
 
 // Include any necessary libraries here
-
 // Define your class and its member functions
 class MotorController {
 private:
@@ -32,7 +31,6 @@ public:
     int counter = 0;
     // Add your member functions here
     void setup();
-    void turnAround();
     bool checkFinish();
     void moveForward();
     void moveBackward();

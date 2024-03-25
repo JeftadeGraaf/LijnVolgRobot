@@ -17,34 +17,17 @@ void MotorController::setup() {
     pinMode(pwmPinLinks, OUTPUT);
 }
 
-void MotorController::turnAround() {
-
-        digitalWrite(directionPinLinks, links_achteruit);
-        digitalWrite(directionPinRechts, rechts_vooruit);
-        analogWrite(pwmPinLinks, 100);
-        analogWrite(pwmPinRechts, 100);
-        delay(500);
-        analogWrite(pwmPinRechts, 0);
-        analogWrite(pwmPinLinks, 0);
-        digitalWrite(directionPinLinks, links_vooruit);
-        digitalWrite(directionPinRechts, rechts_vooruit);
-        delay(1000);
-
-
-}
-
 void MotorController::degrees90Left() {
 
-        digitalWrite(directionPinLinks, links_achteruit);
-        analogWrite(pwmPinLinks, 100);
-        analogWrite(pwmPinRechts, 100);
-        delay(300);
-        analogWrite(pwmPinRechts, 0);
-        analogWrite(pwmPinLinks, 0);
-        digitalWrite(directionPinLinks, links_vooruit);
-        delay(200);
-
-
+    digitalWrite(directionPinLinks, links_achteruit);
+    analogWrite(pwmPinLinks, 100);
+    analogWrite(pwmPinRechts, 100);
+    delay(300);
+    analogWrite(pwmPinRechts, 0);
+    analogWrite(pwmPinLinks, 0);
+    digitalWrite(directionPinLinks, links_vooruit);
+    delay(200);
+        
 }
 
 void MotorController::degrees90Right() {
