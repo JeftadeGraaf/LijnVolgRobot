@@ -112,7 +112,6 @@ void Display::displayFinishTime() {
     while(millis() - startMillis3 < 1000) {
         setCharacters('F', 'I');
         displayCharacters();
-        delay(1000);
     }
 }
 
