@@ -27,6 +27,8 @@ class Display {
         void setCharacters(char charu1, char charu2);
         void displayChar(char character, bool display);
         void displayCharacters();
+        void aftellen(char tienden, char enen);
+        void setStartTime();
 };
 
 #endif
