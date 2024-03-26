@@ -91,7 +91,7 @@ bool checkFinish() {
   }
   irArray.refreshValues();
   if (irArray.values[0] == 0 && irArray.values[1] == 0 && irArray.values[2] == 0 && irArray.values[3] == 0 && irArray.values[4] == 0) {
-    driving = false;
+    // driving = false;
     return true;
   }
   // returns the robot to starting position
@@ -120,13 +120,16 @@ void getMovement() {
       driving = false;
     }
     else {
+      digitalWrite(dotPin, HIGH);
+      //delay(1000);
       digitalWrite(directionPinLinks, links_vooruit);
       digitalWrite(directionPinRechts, rechts_achteruit);
       analogWrite(pwmPinLinks, 50);
       analogWrite(pwmPinRechts, 50);
-      int startMillis = millis();
-      while(millis() - startMillis < 500) {
-        display.displayTime();
+
+      long int startMillis = millis();
+      while(millis() - startMillis <= 500) {
+      display.displayTime();
       }
     }
   }
@@ -245,11 +248,6 @@ void getMovement() {
   }
 
   else if (bitvalue == "11000"){
-    // irArray.refreshValues();
-    // while (irArray.values[4] == 0) {
-    //   motorcontroller.bigRight();
-    //   irArray.refreshValues();
-    // }
     motorcontroller.bigRight(display);
 
   }
@@ -294,6 +292,7 @@ void getMovement() {
 void loop(){
   display.aftellen('1', '0');
   display.setStartTime();
+  irArray.refreshValues();
 
   while(irArray.values[0] != 0 && irArray.values[1] != 0 && irArray.values[2] != 0 && irArray.values[3] != 0 && irArray.values[4] != 0) {
     motorcontroller.moveForward();
@@ -309,7 +308,7 @@ void loop(){
       motorcontroller.turnAround(display);
     }
     display.displayTime();
+    digitalWrite(dotPin, LOW);
   }
-
   display.displayFinishTime();
 }
