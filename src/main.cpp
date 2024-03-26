@@ -2,7 +2,6 @@
 #include <Display.h>
 #include <IRSensor.h>
 #include <IRArray.h>
-#include <USSensor.h>
 #include <MotorController.h>
 #include <NewPing.h>
 
@@ -50,7 +49,6 @@ bool driving = true;
 
 
 IRArray irArray(IRArrayPins);
-USSensor usSensor(triggerPin, echoPin);
 NewPing sonar(triggerPin, echoPin, 10);
 
 void setup(){
@@ -59,7 +57,6 @@ void setup(){
   display.setup();
   motorcontroller.setup();
   irArray.setup();
-  usSensor.setup();
 }
 
 void searchDirection() {
