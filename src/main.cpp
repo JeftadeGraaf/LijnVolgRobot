@@ -5,7 +5,7 @@
 #include <MotorController.h>
 #include <NewPing.h>
 
-int startMillis;
+long int startMillis;
 
 char getLastTwoDigitsChar(int number, int position) {
   // Convert the number to a string
@@ -35,7 +35,7 @@ int directionPinRechts = 12; // right, low = vooruit
 int pwmPinRechts = 3;
 int directionPinLinks = 13; // left, high = vooruit
 int pwmPinLinks = 11;
-int echoPin = 10;
+int dotPin = 10;
 int triggerPin = 9;
 
 int rechts_vooruit = 0;
@@ -49,7 +49,7 @@ bool driving = true;
 
 
 IRArray irArray(IRArrayPins);
-NewPing sonar(triggerPin, echoPin, 10);
+NewPing sonar(triggerPin, triggerPin, 10);
 
 void setup(){
   TCCR2B = TCCR2B & B11111000 | B00000111;
@@ -57,6 +57,7 @@ void setup(){
   display.setup();
   motorcontroller.setup();
   irArray.setup();
+  pinMode(dotPin, OUTPUT);
 }
 
 void searchDirection() {
@@ -205,16 +206,7 @@ void getMovement() {
   }
 
   else if (bitvalue == "10000"){
-    irArray.refreshValues();
-    while (irArray.values[4] == 0) {
-      if (irArray.values[0] == 0 && irArray.values[1] == 0 && irArray.values[2] == 0 && irArray.values[3] == 0 && irArray.values[4] == 0) {
-        searchDirection();
-      }
-
-      motorcontroller.bigRight(display);
-      irArray.refreshValues();
-    }
-
+    motorcontroller.bigRight(display);
   }
 
   else if (bitvalue == "10001"){
@@ -300,11 +292,18 @@ void getMovement() {
 }
 
 void loop(){
-  //display.aftellen('1', '0');
+  display.aftellen('1', '0');
   display.setStartTime();
+
+  while(irArray.values[0] != 0 && irArray.values[1] != 0 && irArray.values[2] != 0 && irArray.values[3] != 0 && irArray.values[4] != 0) {
+    motorcontroller.moveForward();
+    irArray.refreshValues();
+    display.displayTime();
+  }
 
   while (driving) {
     irArray.refreshValues();
+    digitalWrite(dotPin, LOW);
     getMovement();
     if(sonar.ping_cm() != 0) {
       motorcontroller.turnAround(display);

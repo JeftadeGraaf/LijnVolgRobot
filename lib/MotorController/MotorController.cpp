@@ -19,7 +19,7 @@ void MotorController::setup() {
 }
 
 void MotorController::degrees90Left(Display display) {
-
+    digitalWrite(directionPinRechts, rechts_vooruit);
     digitalWrite(directionPinLinks, links_achteruit);
     analogWrite(pwmPinLinks, 100);
     analogWrite(pwmPinRechts, 100);
@@ -38,7 +38,7 @@ void MotorController::degrees90Left(Display display) {
 }
 
 void MotorController::degrees90Right(Display display) {
-
+    digitalWrite(directionPinLinks, links_vooruit);
     digitalWrite(directionPinRechts, rechts_achteruit);
     analogWrite(pwmPinRechts, 100);
     analogWrite(pwmPinLinks, 100);
@@ -119,15 +119,15 @@ void MotorController::smallLeft() {
 }
 
 void MotorController::turnAround(Display display) {
-  digitalWrite(directionPinLinks, links_achteruit);
-  analogWrite(pwmPinLinks, 100);
-  analogWrite(pwmPinRechts, 100);
-  startMillis = millis();
-  while(millis() - startMillis < 450) {
-      display.displayTime();
-  }
-  analogWrite(pwmPinRechts, 0);
-  analogWrite(pwmPinLinks, 0);
-  digitalWrite(directionPinLinks, links_vooruit);
-//   delay(1000);
+    digitalWrite(directionPinRechts, rechts_vooruit);
+    digitalWrite(directionPinLinks, links_achteruit);
+    analogWrite(pwmPinLinks, 100);
+    analogWrite(pwmPinRechts, 100);
+    startMillis = millis();
+    while(millis() - startMillis < 450) {
+        display.displayTime();
+    }
+    analogWrite(pwmPinRechts, 0);
+    analogWrite(pwmPinLinks, 0);
+    //   delay(1000);
 }

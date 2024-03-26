@@ -77,7 +77,7 @@ void Display::aftellen(char tienden, char enen) {
         } 
     }
     int startMillis = millis();
-    while(millis() - startMillis < 3000) {
+    while(millis() - startMillis < 1000) {
         setCharacters('S', 'T');
         displayCharacters();
     }
