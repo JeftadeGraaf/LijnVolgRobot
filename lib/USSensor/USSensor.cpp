@@ -18,6 +18,6 @@ float USSensor::getDistance() {
     digitalWrite(triggerPin, LOW);
     int duration = pulseIn(echoPin, HIGH);
     float distance = duration * 0.034 / 2;
-    delay(10);
+    delay(20);
     return distance;
 }

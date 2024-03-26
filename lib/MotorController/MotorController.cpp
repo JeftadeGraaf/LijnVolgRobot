@@ -117,3 +117,17 @@ void MotorController::smallLeft() {
     analogWrite(pwmPinRechts, arraytinyleft[2]);    //als iets niet werkt terug zetten naar 2
     analogWrite(pwmPinLinks, arraytinyleft[0]);     //"                                   " 0
 }
+
+void MotorController::turnAround(Display display) {
+  digitalWrite(directionPinLinks, links_achteruit);
+  analogWrite(pwmPinLinks, 100);
+  analogWrite(pwmPinRechts, 100);
+  startMillis = millis();
+  while(millis() - startMillis < 450) {
+      display.displayTime();
+  }
+  analogWrite(pwmPinRechts, 0);
+  analogWrite(pwmPinLinks, 0);
+  digitalWrite(directionPinLinks, links_vooruit);
+//   delay(1000);
+}

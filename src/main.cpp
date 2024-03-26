@@ -4,6 +4,7 @@
 #include <IRArray.h>
 #include <USSensor.h>
 #include <MotorController.h>
+#include <NewPing.h>
 
 int startMillis;
 
@@ -50,6 +51,7 @@ bool driving = true;
 
 IRArray irArray(IRArrayPins);
 USSensor usSensor(triggerPin, echoPin);
+NewPing sonar(triggerPin, echoPin, 10);
 
 void setup(){
   TCCR2B = TCCR2B & B11111000 | B00000111;
@@ -307,6 +309,9 @@ void loop(){
   while (driving) {
     irArray.refreshValues();
     getMovement();
+    if(sonar.ping_cm() != 0) {
+      motorcontroller.turnAround(display);
+    }
     display.displayTime();
   }
 

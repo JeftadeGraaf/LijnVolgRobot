@@ -43,6 +43,7 @@ public:
     void stop();
     void degrees90Left(Display display);
     void degrees90Right(Display display);
+    void turnAround(Display display);
 };
 
 #endif
