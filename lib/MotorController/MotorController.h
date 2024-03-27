@@ -26,7 +26,7 @@ private:
     const int links_achteruit = 0;
 
     long int t1;
-    int startMillis;
+    long int startMillis;
 public:
     // Constructor(s)
     MotorController(int directionPinRechts, int pwmPinRechts, int directionPinLinks, int pwmPinLinks);
